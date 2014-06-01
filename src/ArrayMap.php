@@ -101,4 +101,30 @@ class ArrayMap {
         }
         return $this;
     }
+
+    /**
+     * Example filter using keys:
+     * $array = ArrayMap::create($array)
+     *     ->filter(function ($value, $key) {
+     *         return $value > 2;
+     *     })
+     *     ->getArray();
+     *
+     * @param $callback
+     * @return $this
+     * @throws Exception\ArrayMapException
+     */
+    public function filter($callback) {
+        if (!is_callable($callback)) {
+            throw new ArrayMapException('Argument is not callable');
+        }
+        $array = array();
+        foreach ($this->data as $key => $item) {
+            if(call_user_func($callback, $item, $key)) {
+                $array[$key] = $item;
+            }
+        }
+        $this->data = $array;
+        return $this;
+    }
 }
