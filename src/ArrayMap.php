@@ -76,6 +76,23 @@ class ArrayMap {
         return $this;
     }
 
+    /**
+     * Merge array
+     *
+     * Example:
+     * $array = ArrayMap::create($array)
+     *     ->mergeWith(array(
+     *         1 => 1,
+     *         2 => array(
+     *             1 => 1,
+     *         ),
+     *     ))
+     *     ->getArray();
+     *
+     * @param array $data
+     * @param bool $recursive
+     * @return $this
+     */
     public function mergeWith(array $data, $recursive = true) {
         if ($recursive) {
             $this->data = array_merge_recursive($this->data, $data);

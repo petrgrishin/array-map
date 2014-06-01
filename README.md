@@ -36,3 +36,28 @@ $array = ArrayMap::create($array)
     })
     ->getArray();
 ```
+
+#### Merge
+Recursive merge
+```php
+$array = ArrayMap::create($array)
+    ->mergeWith(array(
+        1 => 1,
+        2 => 2,
+        3 => array(
+            1 => 1,
+            2 => 2,
+        ),
+    ))
+    ->getArray();
+```
+
+One level merge
+```php
+$array = ArrayMap::create($array)
+    ->mergeWith(array(
+        1 => 1,
+        2 => 2,
+    ), false)
+    ->getArray();
+```
