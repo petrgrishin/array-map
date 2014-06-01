@@ -61,3 +61,12 @@ $array = ArrayMap::create($array)
     ), false)
     ->getArray();
 ```
+
+#### Filtering
+```php
+$array = ArrayMap::create($array)
+    ->filter(function ($value, $key) {
+        return $value > 10 && $key > 2;
+    })
+    ->getArray();
+```
