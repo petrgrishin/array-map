@@ -1,0 +1,87 @@
+<?php
+/**
+ * @author Petr Grishin <petr.grishin@grishini.ru>
+ */
+
+namespace PetrGrishin\ArrayMap;
+
+
+use PetrGrishin\ArrayMap\Exception\ArrayMapException;
+
+class ArrayMap {
+    /** @var array */
+    private $data;
+
+    /**
+     * @return string
+     */
+    public static function className() {
+        return get_called_class();
+    }
+
+    /**
+     * @param array|null $data
+     * @return static
+     */
+    public static function create(array $data = null) {
+        return new static($data);
+    }
+
+    /**
+     * @param array|null $data
+     */
+    public function __construct(array $data = null) {
+        $this->setArray($data ?: array());
+    }
+
+    /**
+     * @param array $data
+     * @return $this
+     */
+    public function setArray(array $data) {
+        $this->data = $data;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArray() {
+        return $this->data;
+    }
+
+    /**
+     * Applies the callback to the elements of the given arrays
+     *
+     * Example map using keys:
+     * $array = ArrayMap::create($array)
+     *     ->map(function ($value, $key) {
+     *         return array($key => $value);
+     *     })
+     *     ->getArray();
+     *
+     * @param $callback
+     * @return $this
+     * @throws Exception\ArrayMapException
+     */
+    public function map($callback) {
+        if (!is_callable($callback)) {
+            throw new ArrayMapException('Argument is not callable');
+        }
+        $array = array();
+        foreach ($this->data as $key => $item) {
+            $array = array_merge_recursive($array, (array)call_user_func($callback, $item, $key));
+        }
+        $this->data = $array;
+        return $this;
+    }
+
+    public function mergeWith(array $data, $recursive = true) {
+        if ($recursive) {
+            $this->data = array_merge_recursive($this->data, $data);
+        } else {
+            $this->data = array_merge($this->data, $data);
+        }
+        return $this;
+    }
+}
