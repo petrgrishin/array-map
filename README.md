@@ -11,7 +11,7 @@ Add a dependency to your project's composer.json:
 ```json
 {
     "require": {
-        "petrgrishin/array-map": "dev-master"
+        "petrgrishin/array-map": "~1.0"
     }
 }
 ```
