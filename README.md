@@ -70,3 +70,22 @@ $array = ArrayMap::create($array)
     })
     ->getArray();
 ```
+
+#### User sort
+Sort by value
+```php
+$array = ArrayMap::create($array)
+    ->userSortByValue(function ($first, $second) {
+        return $first < $second ? -1 : 1;
+    })
+    ->getArray();
+```
+
+Sort by key
+```php
+$array = ArrayMap::create($array)
+    ->userSortByKey(function ($first, $second) {
+        return $first < $second ? -1 : 1;
+    })
+    ->getArray();
+```
