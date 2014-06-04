@@ -34,6 +34,10 @@ class ArrayMap {
         $this->setArray($data ?: array());
     }
 
+    public function copy() {
+        return clone $this;
+    }
+
     /**
      * @param array $data
      * @return $this
@@ -126,5 +130,23 @@ class ArrayMap {
         }
         $this->data = $array;
         return $this;
+    }
+
+    public function userSortByValue($callback){
+        if (!is_callable($callback)) {
+            throw new ArrayMapException('Argument is not callable');
+        }
+        $array = $this->getArray();
+        uasort($array, $callback);
+        $this->setArray($array);
+    }
+
+    public function userSortByKey($callback){
+        if (!is_callable($callback)) {
+            throw new ArrayMapException('Argument is not callable');
+        }
+        $array = $this->getArray();
+        uasort($array, $callback);
+        $this->setArray($array);
     }
 }

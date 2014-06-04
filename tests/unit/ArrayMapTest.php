@@ -61,4 +61,22 @@ class ArrayMapTest extends PHPUnit_Framework_TestCase {
         });
         $this->assertEquals(array('c' => 3), $instance->getArray());
     }
+
+    public function testUserSortByValue() {
+        $original = array('a' => 2, 'b' => 3, 'c' => 1);
+        $instance = ArrayMap::create($original);
+        $instance->userSortByValue(function ($first, $second) {
+            return $first < $second ? -1 : 1;
+        });
+        $this->assertEquals(array('c' => 1, 'a' => 2, 'b' => 3), $instance->getArray());
+    }
+
+    public function testUserSortByKey() {
+        $original = array('b' => 2, 'c' => 3, 'a' => 1);
+        $instance = ArrayMap::create($original);
+        $instance->userSortByValue(function ($first, $second) {
+            return strcasecmp($first, $second) ? -1 : 1;
+        });
+        $this->assertEquals(array('a' => 1, 'b' => 2, 'c' => 3), $instance->getArray());
+    }
 }
