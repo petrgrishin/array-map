@@ -107,6 +107,32 @@ class ArrayMap {
     }
 
     /**
+     * Replace array
+     *
+     * Example:
+     * $array = ArrayMap::create($array)
+     *     ->replaceWith(array(
+     *         1 => 1,
+     *         2 => array(
+     *             1 => 1,
+     *         ),
+     *     ))
+     *     ->getArray();
+     *
+     * @param array $data
+     * @param bool $recursive
+     * @return $this
+     */
+    public function replaceWith(array $data, $recursive = true) {
+        if ($recursive) {
+            $this->data = array_replace_recursive($this->data, $data);
+        } else {
+            $this->data = array_replace($this->data, $data);
+        }
+        return $this;
+    }
+
+    /**
      * Example filter using keys:
      * $array = ArrayMap::create($array)
      *     ->filter(function ($value, $key) {
