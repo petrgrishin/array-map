@@ -44,6 +44,20 @@ class ArrayMapTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(array('a' => array(1, 2), 'b', 'c', 'd', 'e'), $instance->getArray());
     }
 
+    public function testReplaceWith() {
+        $original = array('a' => 1, 'b' => 2, 'c' => 3);
+        $instance = ArrayMap::create($original);
+        $instance->replaceWith(array('c' => 4, 'd' => 5), false);
+        $this->assertEquals(array('a' => 1, 'b' => 2, 'c' => 4, 'd' => 5), $instance->getArray());
+    }
+
+    public function testRecursiveReplaceWith() {
+        $original = array('a' => array('x' => 1));
+        $instance = ArrayMap::create($original);
+        $instance->replaceWith(array('a' => array('x' => 2)));
+        $this->assertEquals(array('a' => array('x' => 2)), $instance->getArray());
+    }
+
     public function testFiltering() {
         $original = array('a' => 1, 'b' => 2, 'c' => 3);
         $instance = ArrayMap::create($original);
