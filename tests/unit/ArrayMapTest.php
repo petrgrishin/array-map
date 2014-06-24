@@ -1,5 +1,6 @@
 <?php
 use \PetrGrishin\ArrayMap\ArrayMap;
+use PetrGrishin\ArrayObject\ArrayObject;
 
 /**
  * @author Petr Grishin <petr.grishin@grishini.ru>
@@ -92,5 +93,39 @@ class ArrayMapTest extends PHPUnit_Framework_TestCase {
             return strcasecmp($first, $second) ? -1 : 1;
         });
         $this->assertEquals(array('a' => 1, 'b' => 2, 'c' => 3), $instance->getArray());
+    }
+
+    public function testArrayObject() {
+        $original = array('a' => 1, 'b' => 2, 'c' => 3);
+        $expected = array('a' => 2, 'b' => 4, 'c' => 6);
+        $arrayObject = new ArrayMapTest_ArrayObject();
+        $arrayObject->setArray($original);
+        $this->assertEquals($original, $arrayObject->getArray());
+        $instance = ArrayMap::create($arrayObject);
+        $this->assertEquals($original, $arrayObject->getArray());
+        $instance->map(function ($value, $key) {
+            return array($key => $value * 2);
+        });
+        $this->assertEquals($expected, $instance->getArray());
+        $this->assertEquals($expected, $arrayObject->getArray());
+    }
+}
+
+class ArrayMapTest_ArrayObject implements ArrayObject {
+
+    private $_data;
+
+    /**
+     * @param array|ArrayObject $data
+     */
+    public function setArray($data) {
+        $this->_data = $data;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArray() {
+        return $this->_data;
     }
 }
