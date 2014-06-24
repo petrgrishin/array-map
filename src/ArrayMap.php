@@ -7,9 +7,10 @@ namespace PetrGrishin\ArrayMap;
 
 
 use PetrGrishin\ArrayMap\Exception\ArrayMapException;
+use PetrGrishin\ArrayObject\ArrayObject;
 
-class ArrayMap {
-    /** @var array */
+class ArrayMap implements ArrayObject {
+    /** @var array|ArrayObject */
     private $data;
 
     /**
@@ -20,17 +21,17 @@ class ArrayMap {
     }
 
     /**
-     * @param array|null $data
+     * @param array|ArrayObject|null $data
      * @return static
      */
-    public static function create(array $data = null) {
+    public static function create($data = null) {
         return new static($data);
     }
 
     /**
-     * @param array|null $data
+     * @param array|ArrayObject|null $data
      */
-    public function __construct(array $data = null) {
+    public function __construct($data = null) {
         $this->setArray($data ?: array());
     }
 
@@ -39,11 +40,15 @@ class ArrayMap {
     }
 
     /**
-     * @param array $data
+     * @param array|ArrayObject $data
      * @return $this
      */
-    public function setArray(array $data) {
-        $this->data = $data;
+    public function setArray($data) {
+        if ($this->isArrayObject()) {
+            $this->data->setArray($data);
+        } else {
+            $this->data = $data;
+        }
         return $this;
     }
 
@@ -51,6 +56,9 @@ class ArrayMap {
      * @return array
      */
     public function getArray() {
+        if ($this->isArrayObject()) {
+            return $this->data->getArray();
+        }
         return $this->data;
     }
 
@@ -73,10 +81,10 @@ class ArrayMap {
             throw new ArrayMapException('Argument is not callable');
         }
         $array = array();
-        foreach ($this->data as $key => $item) {
+        foreach ($this->getArray() as $key => $item) {
             $array = array_merge_recursive($array, (array)call_user_func($callback, $item, $key));
         }
-        $this->data = $array;
+        $this->setArray($array);
         return $this;
     }
 
@@ -99,9 +107,9 @@ class ArrayMap {
      */
     public function mergeWith(array $data, $recursive = true) {
         if ($recursive) {
-            $this->data = array_merge_recursive($this->data, $data);
+            $this->setArray(array_merge_recursive($this->getArray(), $data));
         } else {
-            $this->data = array_merge($this->data, $data);
+            $this->setArray(array_merge($this->getArray(), $data));
         }
         return $this;
     }
@@ -125,9 +133,9 @@ class ArrayMap {
      */
     public function replaceWith(array $data, $recursive = true) {
         if ($recursive) {
-            $this->data = array_replace_recursive($this->data, $data);
+            $this->setArray(array_replace_recursive($this->getArray(), $data));
         } else {
-            $this->data = array_replace($this->data, $data);
+            $this->setArray(array_replace($this->getArray(), $data));
         }
         return $this;
     }
@@ -149,12 +157,12 @@ class ArrayMap {
             throw new ArrayMapException('Argument is not callable');
         }
         $array = array();
-        foreach ($this->data as $key => $item) {
+        foreach ($this->getArray() as $key => $item) {
             if(call_user_func($callback, $item, $key)) {
                 $array[$key] = $item;
             }
         }
-        $this->data = $array;
+        $this->setArray($array);
         return $this;
     }
 
@@ -174,5 +182,9 @@ class ArrayMap {
         $array = $this->getArray();
         uasort($array, $callback);
         $this->setArray($array);
+    }
+
+    protected function isArrayObject() {
+        return is_object($this->data) && $this->data instanceof ArrayObject;
     }
 }
