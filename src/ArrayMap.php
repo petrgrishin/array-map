@@ -8,10 +8,9 @@ namespace PetrGrishin\ArrayMap;
 
 use PetrGrishin\ArrayMap\Exception\ArrayMapException;
 use PetrGrishin\ArrayObject\ArrayObject;
+use PetrGrishin\ArrayObject\BaseArrayObject;
 
-class ArrayMap implements ArrayObject {
-    /** @var array|ArrayObject */
-    private $data;
+class ArrayMap extends BaseArrayObject {
 
     /**
      * @return string
@@ -37,29 +36,6 @@ class ArrayMap implements ArrayObject {
 
     public function copy() {
         return clone $this;
-    }
-
-    /**
-     * @param array|ArrayObject $data
-     * @return $this
-     */
-    public function setArray($data) {
-        if ($this->isArrayObject()) {
-            $this->data->setArray($data);
-        } else {
-            $this->data = $data;
-        }
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getArray() {
-        if ($this->isArrayObject()) {
-            return $this->data->getArray();
-        }
-        return $this->data;
     }
 
     /**
@@ -182,9 +158,5 @@ class ArrayMap implements ArrayObject {
         $array = $this->getArray();
         uasort($array, $callback);
         $this->setArray($array);
-    }
-
-    protected function isArrayObject() {
-        return is_object($this->data) && $this->data instanceof ArrayObject;
     }
 }
