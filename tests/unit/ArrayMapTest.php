@@ -109,6 +109,18 @@ class ArrayMapTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($expected, $instance->getArray());
         $this->assertEquals($expected, $arrayObject->getArray());
     }
+
+    public function testNesting() {
+        $original = array('a' => 1, 'b' => 2, 'c' => 3);
+        $expected = array('a' => 2, 'b' => 4, 'c' => 6);
+        $instanceFirst = ArrayMap::create($original);
+        $instanceSecond = ArrayMap::create($instanceFirst);
+        $instanceThird = ArrayMap::create($instanceSecond);
+        $instanceThird->map(function ($value, $key) {
+            return array($key => $value * 2);
+        });
+        $this->assertEquals($expected, $instanceFirst->getArray());
+    }
 }
 
 class ArrayMapTest_ArrayObject implements ArrayObject {
