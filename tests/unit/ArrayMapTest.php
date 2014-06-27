@@ -13,6 +13,17 @@ class ArrayMapTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf(ArrayMap::className(), $instance);
     }
 
+    public function testCopy() {
+        $original = array(1, 2, 3);
+        $instance = ArrayMap::create($original);
+        $instanceCopy = $instance->copy();
+        $this->assertInstanceOf(ArrayMap::className(), $instance);
+        $this->assertInstanceOf(ArrayMap::className(), $instanceCopy);
+        $this->assertEquals($original, $instance->getArray());
+        $this->assertEquals($original, $instanceCopy->getArray());
+        $this->assertNotEquals(spl_object_hash($instance), spl_object_hash($instanceCopy));
+    }
+
     public function testSimpleMapping() {
         $original = array(1, 2, 3);
         $instance = ArrayMap::create($original);
