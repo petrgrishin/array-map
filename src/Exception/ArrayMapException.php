@@ -6,6 +6,8 @@
 namespace PetrGrishin\ArrayMap\Exception;
 
 
-class ArrayMapException extends \Exception {
+use PetrGrishin\ArrayObject\Exception\ArrayObjectException;
+
+class ArrayMapException extends ArrayObjectException {
 
 }
