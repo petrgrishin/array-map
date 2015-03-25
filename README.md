@@ -89,3 +89,7 @@ $array = ArrayMap::create($array)
     })
     ->getArray();
 ```
+
+Example of use
+--------------
+ArrayAccess class, multi array access — https://github.com/petrgrishin/array-access
