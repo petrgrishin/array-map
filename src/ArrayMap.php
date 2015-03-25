@@ -58,7 +58,8 @@ class ArrayMap extends BaseArrayObject {
         }
         $array = array();
         foreach ($this->getArray() as $key => $item) {
-            $array = array_merge_recursive($array, (array)call_user_func($callback, $item, $key));
+            $result = call_user_func($callback, $item, $key);
+            $array = is_array($result) ? array_replace_recursive($array, $result) : array_merge_recursive($array, (array)$result);
         }
         $this->setArray($array);
         return $this;

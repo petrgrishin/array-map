@@ -42,6 +42,15 @@ class ArrayMapTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(array(0 => 2, 1 => 4, 2 => 6), $instance->getArray());
     }
 
+    public function testKeyMappingInvert() {
+        $original = array(2 => 1, 1 => 2);
+        $instance = ArrayMap::create($original);
+        $instance->map(function ($value, $key) {
+            return array(($key) => $value * 2);
+        });
+        $this->assertEquals(array(2 => 2, 1 => 4), $instance->getArray());
+    }
+
     public function testMergeWith() {
         $original = array(1, 2, 3);
         $instance = ArrayMap::create($original);
