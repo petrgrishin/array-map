@@ -150,6 +150,7 @@ class ArrayMap extends BaseArrayObject {
         $array = $this->getArray();
         uasort($array, $callback);
         $this->setArray($array);
+        return $this;
     }
 
     public function userSortByKey($callback){
@@ -159,5 +160,6 @@ class ArrayMap extends BaseArrayObject {
         $array = $this->getArray();
         uasort($array, $callback);
         $this->setArray($array);
+        return $this;
     }
 }
