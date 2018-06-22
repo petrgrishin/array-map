@@ -162,4 +162,41 @@ class ArrayMap extends BaseArrayObject {
         $this->setArray($array);
         return $this;
     }
+
+    /**
+     * @param int $offset
+     * @param int $length
+     * @param bool|false $preserveKeys
+     * @return ArrayMap
+     * @throws ArrayMapException
+     */
+    public function slice($offset, $length, $preserveKeys = false) {
+        if (!is_numeric($offset)) {
+            throw new ArrayMapException('Argument offset is not numeric');
+        }
+        if (!is_numeric($length)) {
+            throw new ArrayMapException('Argument length is not numeric');
+        }
+
+        $array = array_slice($this->getArray(), $offset, $length, $preserveKeys);
+        $this->setArray($array);
+
+        return $this;
+    }
+
+    /**
+     * @param int $size
+     * @param bool|false $preserveKeys
+     * @return ArrayMap
+     * @throws ArrayMapException
+     */
+    public function chunk($size, $preserveKeys = false) {
+        if (!is_numeric($size)) {
+            throw new ArrayMapException('Argument size is not numeric');
+        }
+
+        $array = array_chunk($this->getArray(), $size, $preserveKeys);
+
+        return new static($array);
+    }
 }
